@@ -66,4 +66,8 @@ public class BookService {
         bookToBeUpdated.setTitle(bookRequest.getTitle());
         return bookRepository.save(bookToBeUpdated);
     }
+
+    public void deleteBookById(Long id) {
+        bookRepository.deleteById(id);
+    }
 }
