@@ -8,6 +8,7 @@ import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -54,4 +55,15 @@ public class BookService {
         return Author.builder().name(authorName).build();
     }
 
+    @Transactional
+    public Book updateBook(Long bookId, BookRequest bookRequest) {
+        Optional<Book> retrievedBook = bookRepository.findById(Long.valueOf(bookId));
+        if (retrievedBook.isEmpty()) {
+            throw new BookNotFoundException(String.format("Book with id %s not found", bookId));
+        }
+        Book bookToBeUpdated = retrievedBook.get();
+        bookToBeUpdated.setAuthor(authorRepository.save(buildAuthor(bookRequest.getAuthor())));
+        bookToBeUpdated.setTitle(bookRequest.getTitle());
+        return bookRepository.save(bookToBeUpdated);
+    }
 }

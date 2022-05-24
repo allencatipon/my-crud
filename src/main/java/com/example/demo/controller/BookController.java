@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Author;
 import com.example.demo.model.Book;
 import com.example.demo.model.BookRequest;
 import com.example.demo.service.BookService;
@@ -39,6 +38,11 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.getBookById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody BookRequest bookRequest) {
+        return ResponseEntity.ok(bookService.updateBook(id, bookRequest));
     }
 
     private Long saveBook(BookRequest bookrequest) {

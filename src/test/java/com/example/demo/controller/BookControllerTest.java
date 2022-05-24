@@ -20,15 +20,15 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@ExtendWith(SpringExtension.class)
 @WebMvcTest(BookController.class)
 class BookControllerTest {
-    
+
     private final String bookTitle1 = "Harry Potter and the Chamber of Secrets";
     private final String bookTitle2 = "Harry Potter and the Chamber of Secrets";
     private final String sampleAuthor = "J. K. Rowling";
@@ -45,7 +45,7 @@ class BookControllerTest {
     private ArgumentCaptor<BookRequest> bookRequestArgumentCaptor;
 
     @Test
-    public void shouldCreateNewBook() throws Exception {
+    public void shouldCreateBookSuccess() throws Exception {
         BookRequest bookRequest = new BookRequest();
         bookRequest.setAuthor(sampleAuthor);
         bookRequest.setTitle(bookTitle1);
@@ -62,11 +62,10 @@ class BookControllerTest {
 
         assertThat(bookRequestArgumentCaptor.getValue().getAuthor(), is(sampleAuthor));
         assertThat(bookRequestArgumentCaptor.getValue().getTitle(), is(bookTitle1));
-
     }
 
     @Test
-    public void shouldReadAllBooks() throws Exception {
+    public void shouldReadAllBooksSuccess() throws Exception {
         when(bookService.getAllBooks()).thenReturn(List.of(
                 createBook(1L, bookTitle1, sampleAuthor),
                 createBook(2L, bookTitle2, sampleAuthor)));
@@ -81,7 +80,29 @@ class BookControllerTest {
     }
 
     @Test
-    public void shouldReturn404BookNotFound() throws Exception {
+    public void shouldUpdateBookSuccess() throws Exception {
+        BookRequest bookRequest = new BookRequest();
+        bookRequest.setAuthor(sampleAuthor);
+        bookRequest.setTitle(bookTitle1);
+
+        when(bookService.updateBook(eq(1L), bookRequestArgumentCaptor.capture()))
+                .thenReturn(createBook(1L, bookTitle1, sampleAuthor));
+
+
+        this.mockMvc
+                .perform(put("/api/books/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.title", is(bookTitle1)));
+
+        assertThat(bookRequestArgumentCaptor.getValue().getAuthor(), is(sampleAuthor));
+        assertThat(bookRequestArgumentCaptor.getValue().getTitle(), is(bookTitle1));
+    }
+
+    @Test
+    public void shouldReturn404BookNotFoundGet() throws Exception {
         Long bookId = 42L;
         when(bookService.getBookById(bookId)).thenThrow(new BookNotFoundException(String.format("Book with id %s not found", bookId)));
         this.mockMvc
@@ -90,7 +111,24 @@ class BookControllerTest {
     }
 
     @Test
-    public void shouldReadBookById() throws Exception {
+    public void shouldReturn404BookNotFoundUpdate() throws Exception {
+        BookRequest bookRequest = new BookRequest();
+        bookRequest.setAuthor(sampleAuthor);
+        bookRequest.setTitle(bookTitle1);
+
+        Long bookId = 42L;
+        when(bookService.updateBook(eq(bookId), bookRequestArgumentCaptor.capture()))
+                .thenThrow(new BookNotFoundException(String.format("Book with id %s not found", bookId)));
+
+        this.mockMvc
+                .perform(put("/api/books/42")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldReadBookByIdSuccess() throws Exception {
         when(bookService.getBookById(1L)).thenReturn(
                 createBook(1L, bookTitle1, sampleAuthor));
 
