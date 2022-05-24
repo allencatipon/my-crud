@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    List<Book> findByTitleOrderByTitle(String title);
-    List<Book> findByTitleOrderByTitleAsc(String title);
-
-    Page<Book> findAllByTitleIgnoreCase(String title, Pageable pageable);
+//    List<Book> findByTitleOrderByTitle(String title);
+//    List<Book> findByTitleOrderByTitleAsc(String title);
+//
+//    Page<Book> findAllByTitleIgnoreCase(String title, Pageable pageable);
 }

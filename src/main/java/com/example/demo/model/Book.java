@@ -25,7 +25,8 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-//    @ManyToOne
-    private String author;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="author_id", referencedColumnName = "id")
+    private Author author;
 
 }
