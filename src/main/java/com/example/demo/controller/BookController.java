@@ -67,7 +67,7 @@ public class BookController {
     }
 
     @GetMapping("/paginationAndSort/{offset}/{pageSize}")
-    private  ResponseEntity<Page<Book>>  getBooksWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @RequestParam String field) {
-        return ResponseEntity.ok(bookService.findBooksWithPaginationAndSorting(offset, pageSize, field));
+    private ResponseEntity<Page<Book>> getBooksWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @RequestParam String field, @RequestParam String order) {
+        return ResponseEntity.ok(bookService.findBooksWithPaginationAndSorting(offset, pageSize, field, order));
     }
 }

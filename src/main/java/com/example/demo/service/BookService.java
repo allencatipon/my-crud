@@ -82,7 +82,10 @@ public class BookService {
         return bookRepository.findAll(PageRequest.of(offset, pageSize));
     }
 
-    public Page<Book> findBooksWithPaginationAndSorting(int offset,int pageSize,String field){
+    public Page<Book> findBooksWithPaginationAndSorting(int offset,int pageSize,String field, String order){
+        if(order.equalsIgnoreCase("desc")){
+            return bookRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field).descending()));
+        }
         return bookRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
     }
 }
