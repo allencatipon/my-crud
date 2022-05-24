@@ -7,6 +7,9 @@ import com.example.demo.model.BookRequest;
 import com.example.demo.repository.AuthorRepository;
 import com.example.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -69,5 +72,20 @@ public class BookService {
 
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    public List<Book> findBooksWithSorting(String field){
+        return bookRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+    }
+
+    public Page<Book> findBooksWithPagination(int offset, int pageSize){
+        return bookRepository.findAll(PageRequest.of(offset, pageSize));
+    }
+
+    public Page<Book> findBooksWithPaginationAndSorting(int offset,int pageSize,String field, String order){
+        if(order.equalsIgnoreCase("desc")){
+            return bookRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field).descending()));
+        }
+        return bookRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field)));
     }
 }
