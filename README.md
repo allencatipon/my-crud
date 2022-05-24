@@ -6,15 +6,24 @@ H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:e70d25
 3. Visit http://localhost:8080/h2-console/, On JDBC URL, put jdbc:h2:mem:e70d25fc-24ff-4053-b77d-c58d7c7df8d7, click connect
 
 For creating new book:
-http://localhost:8080/api/books
+POST: http://localhost:8080/api/books
 {
     "author": "author999",
     "title": "title999"
 }
 
+For getting all books:
+GET: http://localhost:8080/api/books
+
+For getting book by ID:
+GET: http://localhost:8080/api/books/2
+
+
 @Valid - so that there's a validation that it should be NotNull
 
-Branch: feature/crud/oneToMany_ManyToOne_DB
+Branch: 
+feature/crud/oneToMany_ManyToOne_DB
+feature/crud/withTDD
 
 
 

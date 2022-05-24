@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.BookNotFoundException;
 import com.example.demo.model.Author;
 import com.example.demo.model.Book;
 import com.example.demo.model.BookRequest;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -36,7 +38,20 @@ public class BookService {
         return newBook.getId();
     }
 
+    public List<Book> getAllBooks(){
+        return bookRepository.findAll();
+    }
+
+    public Book getBookById(Long id){
+        Optional<Book> requestedBook = bookRepository.findById(id);
+        if(requestedBook.isEmpty()){
+            throw new BookNotFoundException(String.format("Book with id %s not found", id));
+        }
+        return requestedBook.get();
+    }
+
     private Author buildAuthor(String authorName) {
         return Author.builder().name(authorName).build();
     }
+
 }

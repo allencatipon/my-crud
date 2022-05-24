@@ -9,10 +9,12 @@ import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@EnableJpaAuditing(auditorAwareRef = "auditor")
 public class BookInitializer implements CommandLineRunner {
 
     @Autowired
