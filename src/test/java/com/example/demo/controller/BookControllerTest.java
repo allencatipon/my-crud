@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BookController.class)
 class BookControllerTest {
 
-    private final String bookTitle1 = "Harry Potter and the Chamber of Secrets";
+    private final String bookTitle1 = "Harry Potter and the Sorcerer's Stone";
     private final String bookTitle2 = "Harry Potter and the Chamber of Secrets";
     private final String sampleAuthor = "J. K. Rowling";
     @Autowired

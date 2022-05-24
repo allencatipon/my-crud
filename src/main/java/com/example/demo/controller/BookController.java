@@ -4,6 +4,7 @@ import com.example.demo.model.Book;
 import com.example.demo.model.BookRequest;
 import com.example.demo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +54,20 @@ public class BookController {
 
     private Long saveBook(BookRequest bookrequest) {
         return bookService.createNewBook(bookrequest);
+    }
+
+    @GetMapping("/sort")
+    private ResponseEntity<List<Book>> getBooksWithSort(@RequestParam String field) {
+        return ResponseEntity.ok(bookService.findBooksWithSorting(field));
+    }
+
+    @GetMapping("/pagination/{offset}/{pageSize}")
+    private ResponseEntity<Page<Book>> getBooksWithPagination(@PathVariable int offset, @PathVariable int pageSize) {
+        return ResponseEntity.ok(bookService.findBooksWithPagination(offset, pageSize));
+    }
+
+    @GetMapping("/paginationAndSort/{offset}/{pageSize}")
+    private  ResponseEntity<Page<Book>>  getBooksWithPaginationAndSort(@PathVariable int offset, @PathVariable int pageSize, @RequestParam String field) {
+        return ResponseEntity.ok(bookService.findBooksWithPaginationAndSorting(offset, pageSize, field));
     }
 }

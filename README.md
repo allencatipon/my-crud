@@ -18,6 +18,28 @@ GET: http://localhost:8080/api/books
 For getting book by ID:
 GET: http://localhost:8080/api/books/2
 
+For updating a book:
+PUT: http://localhost:8080/api/books/2
+{
+    "author": "author999",
+    "title": "title999"
+}
+
+For deleting a book:
+DELETE: http://localhost:8080/api/books/2
+
+To sort by authorName:
+http://localhost:8080/api/books/sort?field=authorName
+
+To sort by authorId:
+http://localhost:8080/api/books/sort?field=author
+
+To sort by Id with pagination:
+http://localhost:8080/api/books/pagination/0/5
+
+To sort by field with pagination
+http://localhost:8080/api/books/paginationAndSort/0/3?field=title
+http://localhost:8080/api/books/paginationAndSort/2/3?field=authorName
 
 @Valid - so that there's a validation that it should be NotNull
 
